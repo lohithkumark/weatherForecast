@@ -40,5 +40,5 @@ weather-forecast-app/
 Author
 
 Lohith Kumar K
-GitHub: https://github.com/lohithkumark/weatherForecast
+GitHub: https://github.com/lohithkumark
 
