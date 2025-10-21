@@ -39,3 +39,52 @@ body {
   position: relative;
   z-index: 0;
 }
+header.top { text-align: center }
+header.top h1 { font-size: 28px; font-weight: 700; color: #061223; margin-bottom: 8px }
+
+.controls {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.controls input[type="search"] {
+  width: 240px;
+  padding: 12px 14px;
+  border-radius: 16px;
+  border: 1px solid rgba(9,30,66,0.06);
+  backdrop-filter: blur(6px);
+  background: rgba(255,255,255,0.7);
+  outline: none;
+  font-size: 15px;
+  color: #071025;
+  box-shadow: 0 6px 18px rgba(12,24,48,0.06);
+}
+.controls input[type="search"]::placeholder { color: #9aa6b2 }
+
+.controls button {
+  padding: 10px 14px;
+  border-radius: 14px;
+  border: none;
+  font-weight: 600;
+  font-size: 14px;
+  cursor: pointer;
+  background: linear-gradient(180deg, rgba(255,255,255,0.9), rgba(245,249,255,0.9));
+  box-shadow: 0 6px 18px rgba(12,24,48,0.06);
+  color: #071025;
+  transition: transform .12s ease, box-shadow .12s ease;
+}
+.controls button:hover { transform: translateY(-2px) }
+
+.unit-toggle { display: flex; gap: 6px; align-items: center }
+.unit-toggle .unit { padding: 8px 10px; border-radius: 12px; background: transparent; font-weight: 700; color: var(--muted); border: 1px solid transparent }
+.unit-toggle .unit.active { background: linear-gradient(180deg,#fff,#f2f7ff); color: var(--accent); box-shadow:0 6px 20px rgba(6,122,255,0.08); border:1px solid rgba(0,122,255,0.08) }
+
+.recent-dropdown { position: relative; z-index: 10 }
+#recentBtn { padding: 8px 12px; border-radius: 12px; background:#fff; border:1px solid rgba(9,30,66,0.1); font-weight:600; cursor:pointer }
+#recentList { position:absolute; top:calc(100% + 6px); right:0; min-width:180px; background:#fff; border-radius:12px; box-shadow:0 10px 30px rgba(2,6,23,0.12); list-style:none; padding:6px 0; overflow-y:auto; max-height:220px; opacity:0; pointer-events:none; transform:translateY(-6px) scale(0.98); transition: transform .14s ease, opacity .12s ease; z-index:1002 }
+.recent-dropdown.active #recentList { opacity:1; pointer-events:auto; transform:translateY(0) scale(1) }
+#recentList li { padding:10px 14px; color:#022; font-weight:600; cursor:pointer }
+#recentList li:hover, #recentList li:focus { background:#f2f7ff; color:#004db3; outline:none }
