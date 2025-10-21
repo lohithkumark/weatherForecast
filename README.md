@@ -27,8 +27,6 @@ It retrieves current weather and 5-day forecasts from **OpenWeatherMap API** and
 
 ## Test Cities by Weather Type 🌦️
 
-Try searching these cities to see different weather animations in the app:
-
 - **Sunny**: India – Mumbai / Delhi
 - **Cloudy**: UK – London
 - **Rainy**: Singapore
