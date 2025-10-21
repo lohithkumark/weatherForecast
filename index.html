@@ -6,6 +6,52 @@
     <title>Document</title>
 </head>
 <body>
+          <div class="controls">
+        <label for="search" class="visually-hidden">Search city</label>
+        <input id="search" type="search" placeholder="Enter city (e.g., London)" />
+        <button id="searchBtn">Search</button>
+        <button id="locBtn" title="Use my location">Use my location</button>
+        <div class="unit-toggle" role="radiogroup" aria-label="Temperature units">
+          <button id="cBtn" class="unit active" data-unit="metric">°C</button>
+          <button id="fBtn" class="unit" data-unit="imperial">°F</button>
+        </div>
+        <div class="recent-dropdown">
+          <button id="recentBtn">Recent ▼</button>
+          <ul id="recentList" class="hidden" aria-hidden="true"></ul>
+        </div>
+      </div>
+    </header>
+
+    <main>
+      <section id="alertArea" class="alert-area hidden" role="alert"></section>
+
+      <section id="current" class="current card hidden" aria-live="polite">
+        <div class="bg"></div>
+        <div class="current-inner">
+          <div class="location-row">
+            <h2 id="city">—</h2>
+            <time id="localTime">—</time>
+          </div>
+
+          <div class="weather-row">
+            <div class="temp-block">
+              <div id="temp" class="temp">—</div>
+              <div id="desc" class="desc">—</div>
+            </div>
+
+            <div class="icon-block">
+              <img id="icon" alt="weather icon" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR9oDZUM45t4CJmLXtVxA_P7fMD_zVVjRhj6w&ss" />
+            </div>
+          </div>
+
+          <div class="meta-row">
+            <div>Humidity: <span id="humidity">—</span>%</div>
+            <div>Wind: <span id="wind">—</span> m/s</div>
+            <div>Feels: <span id="feels">—</span></div>
+          </div>
+        </div>
+      </section>
+
     
 </body>
 </html>
