@@ -6,15 +6,15 @@ It retrieves current weather and 5-day forecasts from **OpenWeatherMap API** and
 
 ## Features
 
-1. Search for any city worldwide.
-2. Get weather using **geolocation**.
-3. Toggle between **Celsius (°C)** and **Fahrenheit (°F)**.
-4. View **5-day forecast** with daily high/low, wind, and humidity.
-5. Animated backgrounds based on weather conditions:
+- Search for any city worldwide.
+- Get weather using **geolocation**.
+- Toggle between **Celsius (°C)** and **Fahrenheit (°F)**.
+- View **5-day forecast** with daily high/low, wind, and humidity.
+- Animated backgrounds based on weather conditions:
      Clear, Cloudy, Rain, Snow, Thunderstorm, Mist.
-6. Save **recent searches** for quick access.
-7. Responsive design for desktop and mobile devices.
-8. Error handling for invalid city names or network issues.
+- Save **recent searches** for quick access.
+- Responsive design for desktop and mobile devices.
+- Error handling for invalid city names or network issues.
 
 
 ## Technologies Used
