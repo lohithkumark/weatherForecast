@@ -1,4 +1,4 @@
-/* index.js - Full Weather App logic with units, UI helpers, and background */
+/* index.js - Weather App with correct live city time */
 const API_KEY = '3a959fdc66b1bd81bc07baeec627fae5';
 const MAX_RECENTS = 6;
 const RECENTS_KEY = 'wf_recent_cities';
@@ -30,7 +30,7 @@ const selectors = {
   errorBox: $('#errorBox')
 };
 
-let state = { unit: 'metric', lastQuery: null, recents: [] };
+let state = { unit: 'metric', lastQuery: null, recents: [], tzOffset: 0, timer: null };
 
 /* ---------- Init ---------- */
 function init() {
@@ -51,7 +51,7 @@ function bindEvents(){
   document.addEventListener('click', e => { if(!e.target.closest('.recent-dropdown')) closeRecentDropdown(); });
 }
 
-/* ---------- Recent Dropdown ---------- */
+/* ---------- Recents ---------- */
 function renderRecents(){
   const list = selectors.recentList;
   list.innerHTML = '';
@@ -66,17 +66,15 @@ function renderRecents(){
     const li = document.createElement('li');
     li.textContent = city;
     li.tabIndex = 0;
-    li.addEventListener('click', e => { fetchByCity(city); closeRecentDropdown(); });
+    li.addEventListener('click', () => { fetchByCity(city); closeRecentDropdown(); });
     li.addEventListener('keydown', e => { if(e.key==='Enter'){ fetchByCity(city); closeRecentDropdown(); } });
     list.appendChild(li);
   });
 }
 
 function loadRecents(){
-  try {
-    const raw = localStorage.getItem(RECENTS_KEY);
-    state.recents = raw ? JSON.parse(raw) : [];
-  } catch(e){ state.recents = []; }
+  try { const raw = localStorage.getItem(RECENTS_KEY); state.recents = raw ? JSON.parse(raw) : []; }
+  catch(e){ state.recents = []; }
   renderRecents();
 }
 
@@ -100,7 +98,7 @@ function closeRecentDropdown(){
   selectors.recentDropdownWrap.classList.remove('active');
 }
 
-/* ---------- Search & Geolocation ---------- */
+/* ---------- Search & Location ---------- */
 function onSearch(){
   const q = selectors.searchInput.value.trim();
   if(!q) { showError('Please enter a city name'); return; }
@@ -112,10 +110,10 @@ function useMyLocation(){
   showLoading('Getting location…');
   navigator.geolocation.getCurrentPosition(pos=>{
     fetchByCoords(pos.coords.latitude, pos.coords.longitude);
-  }, err => { hideLoading(); showError('Unable to get location'); });
+  }, () => { hideLoading(); showError('Unable to get location'); });
 }
 
-/* ---------- Fetching ---------- */
+/* ---------- Fetch ---------- */
 async function fetchByCity(city){
   try{
     clearUIForFetch();
@@ -125,7 +123,8 @@ async function fetchByCity(city){
     const data = await resp.json();
     state.lastQuery = city;
     addToRecents(data.name);
-    await fetchFullAndRender(data.coord.lat, data.coord.lon, data.name);
+    state.tzOffset = data.timezone; // store timezone offset
+    await fetchFullAndRender(data.coord.lat, data.coord.lon, data.name, data.timezone);
   } catch(e){ hideLoading(); showError(e.message || 'Network error'); }
 }
 
@@ -140,12 +139,11 @@ async function fetchByCoords(lat, lon, name=null){
       } catch(e){}
     }
     state.lastQuery = { lat, lon, name };
-    if(name) addToRecents(name);
     await fetchFullAndRender(lat, lon, name);
   } catch(e){ hideLoading(); showError('Failed to fetch weather'); }
 }
 
-async function fetchFullAndRender(lat, lon, displayName){
+async function fetchFullAndRender(lat, lon, displayName, tzOffsetSec=0){
   try{
     const [cwResp,fResp] = await Promise.all([
       fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${API_KEY}&units=metric`),
@@ -155,7 +153,8 @@ async function fetchFullAndRender(lat, lon, displayName){
     if(!fResp.ok){ handleHTTPError(fResp); return; }
     const cw = await cwResp.json(), forecast = await fResp.json();
     hideLoading();
-    renderCurrent(cw);
+    state.tzOffset = cw.timezone;
+    renderCurrent(cw, state.tzOffset);
     renderForecast(forecast);
     selectors.currentSection.classList.remove('hidden');
     selectors.forecastSection.classList.remove('hidden');
@@ -169,33 +168,36 @@ function handleHTTPError(resp){
   else showError(`API error ${resp.status}`);
 }
 
-/* ---------- Render Current Weather ---------- */
-function renderCurrent(data){
-  const name = data.name || 'Unknown';
-  const utcSec = data.dt;
-  const tzSec = data.timezone;
-  const localSec = utcSec + tzSec;
-  const localDate = new Date(localSec * 1000);
-
-  const h = localDate.getUTCHours().toString().padStart(2,'0');
-  const m = localDate.getUTCMinutes().toString().padStart(2,'0');
-  const weekday = localDate.toLocaleDateString('en-US',{ weekday:'short' });
-
-  selectors.cityEl.textContent = name;
-  selectors.localTimeEl.textContent = `${weekday} ${h}:${m}`;
+/* ---------- Render Current Weather with live time ---------- */
+function renderCurrent(data, tzOffset){
+  selectors.cityEl.textContent = data.name || 'Unknown';
+  selectors.descEl.textContent = data.weather?.[0]?.description || '—';
+  selectors.humidityEl.textContent = data.main.humidity;
+  selectors.windEl.textContent = formatWind(data.wind?.speed ?? 0);
 
   let temp = data.main.temp;
   let feels = data.main.feels_like;
   if(state.unit==='imperial'){ temp = cToF(temp); feels=cToF(feels); }
-
   selectors.tempEl.textContent = `${Math.round(temp)}°${state.unit==='metric'?'C':'F'}`;
-  selectors.descEl.textContent = data.weather?.[0]?.description || '—';
-  selectors.humidityEl.textContent = data.main.humidity;
-  selectors.windEl.textContent = formatWind(data.wind?.speed ?? 0);
   selectors.feelsEl.textContent = `${Math.round(feels)}°${state.unit==='metric'?'C':'F'}`;
   selectors.iconEl.src = data.weather?.[0]?.icon ? `https://openweathermap.org/img/wn/${data.weather[0].icon}@2x.png` : '';
 
   applyWeatherBackground(data.weather?.[0]?.main?.toLowerCase() || '');
+
+  // Start live time
+  if(state.timer) clearInterval(state.timer);
+  function updateTime(){
+    const nowUTC = new Date();
+    // Convert to city time using only API timezone offset (seconds)
+    const cityMs = nowUTC.getTime() + tzOffset * 1000;
+    const cityDate = new Date(cityMs);
+    const h = cityDate.getUTCHours().toString().padStart(2,'0');
+    const m = cityDate.getUTCMinutes().toString().padStart(2,'0');
+    const weekday = cityDate.toLocaleDateString('en-US', { weekday:'short', timeZone:'UTC' });
+    selectors.localTimeEl.textContent = `${weekday} ${h}:${m}`;
+  }
+  updateTime();
+  state.timer = setInterval(updateTime, 1000);
 }
 
 /* ---------- Render Forecast ---------- */
