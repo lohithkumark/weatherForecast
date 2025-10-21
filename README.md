@@ -36,9 +36,18 @@ weather-forecast-app/
 
 
 
+## Github Project link: https://github.com/lohithkumark/weatherForecast
+
+
 
 Author
 
 Lohith Kumar K
+
+
+
 GitHub: https://github.com/lohithkumark
+
+
+
 
