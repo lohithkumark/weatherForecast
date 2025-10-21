@@ -1,4 +1,4 @@
-/* index.js - Setup selectors, state, events, and recent cities */
+/* index.js - Setup selectors, state, events, recent cities, search & geolocation */
 const API_KEY = '3a959fdc66b1bd81bc07baeec627fae5';
 const MAX_RECENTS = 6;
 const RECENTS_KEY = 'wf_recent_cities';
@@ -100,9 +100,25 @@ function closeRecentDropdown(){
   selectors.recentDropdownWrap.classList.remove('active');
 }
 
+/* ---------- Search & Geolocation ---------- */
+function onSearch(){
+  const q = selectors.searchInput.value.trim();
+  if(!q) { showError('Please enter a city name'); return; }
+  fetchByCity(q);
+}
+
+function useMyLocation(){
+  if(!navigator.geolocation){ showError('Geolocation not supported'); return; }
+  showLoading('Getting location…');
+  navigator.geolocation.getCurrentPosition(pos=>{
+    fetchByCoords(pos.coords.latitude, pos.coords.longitude);
+  }, err => { hideLoading(); showError('Unable to get location'); });
+}
+
 /* ---------- Placeholder functions for next commits ---------- */
-function onSearch(){}
-function useMyLocation(){}
 function setUnit(u){}
 function fetchByCity(city){}
 function fetchByCoords(lat, lon, name){}
+function showError(msg){}
+function showLoading(msg){}
+function hideLoading(){}
