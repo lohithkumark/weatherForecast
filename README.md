@@ -25,6 +25,20 @@ It retrieves current weather and 5-day forecasts from **OpenWeatherMap API** and
 - **OpenWeatherMap API** – Provides current weather and forecast data.
 
 
+## Test Cities by Weather Type 🌦️
+
+Try searching these cities to see different weather animations in the app:
+
+- **Sunny**: India – Mumbai / Delhi
+- **Cloudy**: UK – London
+- **Rainy**: Singapore
+- **Snowy**: Russia – Moscow, Canada – Toronto
+- **Mist/Fog**: Japan – Kyoto, UK – Edinburgh
+- **Night/Dark**: Anywhere at night (your local time) or Norway – Tromsø (polar night)
+- **Thunder**: Thailand / Indonesia (during monsoon season)
+
+
+
 ## Usage
 
 - Type a city name and press Search or hit Enter.
