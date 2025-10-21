@@ -1,4 +1,4 @@
-/* index.js - Render current weather and forecast */
+/* index.js - Full Weather App logic with units, UI helpers, and background */
 const API_KEY = '3a959fdc66b1bd81bc07baeec627fae5';
 const MAX_RECENTS = 6;
 const RECENTS_KEY = 'wf_recent_cities';
