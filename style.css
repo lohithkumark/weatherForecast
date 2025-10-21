@@ -1,0 +1,41 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap');
+
+:root {
+  --bg-top: #f6fbff;
+  --bg-bottom: #e9f6ff;
+  --card-bg: rgba(255,255,255,0.72);
+  --card-glow: rgba(8,64,138,0.06);
+  --accent: #007AFF;
+  --muted: #6b7280;
+  --glass-blur: 12px;
+  --card-radius: 20px;
+}
+
+/* Reset */
+* { box-sizing: border-box; margin:0; padding:0 }
+html, body { height:100%; }
+
+body {
+  font-family: -apple-system, "SF Pro Text", "SF Pro Display", Segoe UI, Roboto, "Helvetica Neue", Arial, Inter, sans-serif;
+  background: linear-gradient(180deg, var(--bg-top), var(--bg-bottom));
+  color: #0b1220;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 28px;
+}
+
+/* Utility */
+.hidden { display: none !important; opacity: 0 !important; pointer-events: none !important; }
+
+/* App container */
+.app {
+  width: 100%;
+  max-width: 740px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  padding: 20px;
+  position: relative;
+  z-index: 0;
+}
