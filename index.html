@@ -1,12 +1,16 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Weather Forecast App</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-          <div class="controls">
+  <div class="app">
+    <header class="top">
+      <h1>Weather Forecast</h1>
+      <div class="controls">
         <label for="search" class="visually-hidden">Search city</label>
         <input id="search" type="search" placeholder="Enter city (e.g., London)" />
         <button id="searchBtn">Search</button>
@@ -52,6 +56,20 @@
         </div>
       </section>
 
-    
+      <section id="forecast" class="forecast card hidden">
+        <h3>5-Day Forecast</h3>
+        <div id="forecastList" class="forecast-list" aria-live="polite"></div>
+      </section>
+
+      <section id="errorBox" class="error-box hidden" role="status"></section>
+    </main>
+
+    <footer>
+      <small>Data from OpenWeatherMap • Built with vanilla JS</small>
+    </footer>
+  </div>
+
+  <script src="index.js"></script>
 </body>
 </html>
+
