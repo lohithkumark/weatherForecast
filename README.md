@@ -20,9 +20,18 @@ It retrieves current weather and 5-day forecasts from **OpenWeatherMap API** and
 ## Technologies Used
 
 - **HTML5** – Semantic markup.
-- **CSS3** – Flexbox, gradients, responsive design, and animated        backgrounds.
+- **CSS3** – Flexbox, gradients, responsive design, and animated backgrounds.
 - **JavaScript (ES6+)** – DOM manipulation, fetch API, async/await.
 - **OpenWeatherMap API** – Provides current weather and forecast data.
+
+
+## Usage
+
+- Type a city name and press Search or hit Enter.
+- Click Use my location to fetch local weather.
+- Toggle between °C and °F using the unit buttons.
+- Access recent searches from the Recent dropdown.
+- View animated backgrounds that match the current weather.
 
 
 ## Project Structure
